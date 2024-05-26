@@ -15,24 +15,34 @@ let isRecording = false;
 
 function startRecording() {
   if (!isRecording) {
-    audioStream = record.start({
-      sampleRate: config.audio.sampleRate,
-      threshold: config.audio.threshold,
-      verbose: config.audio.verbose,
-      recordProgram: config.audio.recordProgram
-    });
+    console.log('Starting recording...');
+    try {
+      audioStream = record.start({
+        sampleRate: config.audio.sampleRate,
+        threshold: config.audio.threshold,
+        verbose: config.audio.verbose,
+        recordProgram: config.audio.recordProgram
+      });
 
-    audioStream.on('data', (data) => {
-      io.emit('audio', data);
-    });
+      audioStream.on('data', (data) => {
+        io.emit('audio', data);
+      });
 
-    isRecording = true;
-    console.log('Recording started');
+      audioStream.on('error', (err) => {
+        console.error('Recording error:', err);
+      });
+
+      isRecording = true;
+      console.log('Recording started');
+    } catch (error) {
+      console.error('Error starting recording:', error);
+    }
   }
 }
 
 function stopRecording() {
   if (isRecording) {
+    console.log('Stopping recording...');
     record.stop();
     isRecording = false;
     console.log('Recording stopped');

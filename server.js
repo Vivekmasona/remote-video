@@ -1,30 +1,30 @@
 const express = require('express');
-const http = require('http');
-const socketIo = require('socket.io');
-const fs = require('fs');
-const path = require('path');
+const ytdl = require('ytdl-core');
 
 const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
-
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, 'public')));
-
-io.on('connection', (socket) => {
-    console.log('Client connected');
-
-    socket.on('disconnect', () => {
-        console.log('Client disconnected');
-    });
-
-    // Receive audio chunk from client and broadcast it to all clients
-    socket.on('audioChunk', (chunk) => {
-        io.emit('audioChunk', chunk);
-    });
+app.get('/play', async (req, res) => {
+  const url = req.query.url;
+  
+  try {
+    if (!ytdl.validateURL(url)) {
+      throw new Error('Invalid YouTube URL');
+    }
+    
+    const info = await ytdl.getInfo(url);
+    const audioFormat = ytdl.chooseFormat(info.formats, { quality: 'highestaudio' });
+    
+    res.header('Content-Disposition', `attachment; filename="${info.videoDetails.title}.mp3"`);
+    ytdl(url, {
+      format: audioFormat
+    }).pipe(res);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
 });
 
-server.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
+

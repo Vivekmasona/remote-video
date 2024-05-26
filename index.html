@@ -1,48 +1,40 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Audio Upload and Play</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Upload and Stream</title>
 </head>
 <body>
-  <h1>Upload and Play Audio</h1>
-  <form id="uploadForm" enctype="multipart/form-data">
-    <input type="file" id="audioFile" name="audioFile" accept="audio/*" required>
-    <button type="submit">Upload</button>
-  </form>
+    <input type="file" id="audioFileInput">
+    <button id="uploadButton">Upload</button>
+    <audio id="audioPlayer" controls></audio>
 
-  <audio id="audioPlayer" controls>
-    Your browser does not support the audio element.
-  </audio>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const audioPlayer = document.getElementById('audioPlayer');
+        const uploadButton = document.getElementById('uploadButton');
+        const audioFileInput = document.getElementById('audioFileInput');
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
+        uploadButton.addEventListener('click', () => {
+            const file = audioFileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const chunk = reader.result;
+                    socket.emit('audioChunk', chunk);
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        });
 
-    const uploadForm = document.getElementById('uploadForm');
-    const audioPlayer = document.getElementById('audioPlayer');
-
-    uploadForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-
-      const formData = new FormData(uploadForm);
-      fetch('/upload', {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => response.text())
-      .then(data => {
-        console.log(data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-    });
-
-    socket.on('new-audio', (filePath) => {
-      audioPlayer.src = filePath;
-      audioPlayer.play();
-    });
-  </script>
+        // Receive audio chunks from server and play them
+        socket.on('audioChunk', (chunk) => {
+            audioPlayer.src = URL.createObjectURL(new Blob([chunk]));
+            audioPlayer.play();
+        });
+    </script>
 </body>
 </html>

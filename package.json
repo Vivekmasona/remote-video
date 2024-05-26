@@ -1,16 +1,13 @@
 {
-  "name": "audio-upload-play",
+  "name": "audio-streaming-app",
   "version": "1.0.0",
-  "description": "A project to upload and play audio files using Socket.IO and Node.js",
+  "description": "A simple audio streaming application using Node.js, Express.js, and Socket.io",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
-  "author": "vivekmasona",
-  "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
-    "multer": "^1.4.5-lts.1",
-    "socket.io": "^4.5.4"
+    "express": "^4.17.1",
+    "socket.io": "^4.0.0"
   }
 }

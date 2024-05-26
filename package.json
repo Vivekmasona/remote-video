@@ -1,0 +1,16 @@
+{
+  "name": "radio-broadcast-app",
+  "version": "1.0.0",
+  "description": "A radio-like application using socket.io and PHP to broadcast audio from the server's microphone to users.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^4.0.0",
+    "node-record-lpcm16": "^1.0.0"
+  }
+}

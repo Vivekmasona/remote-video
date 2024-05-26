@@ -1,26 +1,21 @@
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
+const Plyr = require('plyr');
 const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
-let currentVideoId = null;
-
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/plyr', express.static(path.join(__dirname, 'node_modules', 'plyr', 'dist')));
 
 io.on('connection', (socket) => {
     console.log('New client connected');
 
-    if (currentVideoId) {
-        socket.emit('playVideo', currentVideoId);
-    }
-
-    socket.on('playVideo', (videoId) => {
-        currentVideoId = videoId;
-        io.emit('playVideo', videoId);
+    socket.on('playVideo', (videoUrl) => {
+        io.emit('playVideo', videoUrl);
     });
 
     socket.on('disconnect', () => {
@@ -28,4 +23,9 @@ io.on('connection', (socket) => {
     });
 });
 
-server.listen(4000, () => console.log('Server is running on port 4000'));
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+const PORT = process.env.PORT || 4000;
+server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

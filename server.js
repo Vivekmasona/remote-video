@@ -1,21 +1,20 @@
-const express = require('express');
+// api/play.js
+
 const ytdl = require('ytdl-core');
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+module.exports = async (req, res) => {
+  const { query } = req;
+  const url = query.url;
 
-app.get('/play', async (req, res) => {
-  const url = req.query.url;
-  
   try {
-    if (!ytdl.validateURL(url)) {
+    if (!url || !ytdl.validateURL(url)) {
       throw new Error('Invalid YouTube URL');
     }
-    
+
     const info = await ytdl.getInfo(url);
     const audioFormat = ytdl.chooseFormat(info.formats, { quality: 'highestaudio' });
-    
-    res.header('Content-Disposition', `attachment; filename="${info.videoDetails.title}.mp3"`);
+
+    res.setHeader('Content-Disposition', `attachment; filename="${info.videoDetails.title}.mp3"`);
     ytdl(url, {
       format: audioFormat
     }).pipe(res);
@@ -23,8 +22,5 @@ app.get('/play', async (req, res) => {
     console.error(error);
     res.status(500).send('Something went wrong!');
   }
-});
+};
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});

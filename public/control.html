@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Control Panel</title>
+</head>
+<body>
+  <h1>Control Panel</h1>
+  <button onclick="startRecording()">Start Recording</button>
+  <button onclick="stopRecording()">Stop Recording</button>
+
+  <script>
+    function startRecording() {
+      fetch('/start', { method: 'POST' })
+        .then(response => response.text())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error));
+    }
+
+    function stopRecording() {
+      fetch('/stop', { method: 'POST' })
+        .then(response => response.text())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error));
+    }
+  </script>
+</body>
+</html>

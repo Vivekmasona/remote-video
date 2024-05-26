@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Radio Broadcast</title>
+</head>
+<body>
+  <h1>Live Radio Broadcast</h1>
+  <audio id="audio" controls autoplay></audio>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const audio = document.getElementById('audio');
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    socket.on('audio', (data) => {
+      audioContext.decodeAudioData(data.buffer, (buffer) => {
+        const source = audioContext.createBufferSource();
+        source.buffer = buffer;
+        source.connect(audioContext.destination);
+        source.start(0);
+      });
+    });
+  </script>
+</body>
+</html>

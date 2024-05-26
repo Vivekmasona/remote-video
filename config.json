@@ -1,0 +1,11 @@
+{
+  "server": {
+    "port": 3000
+  },
+  "audio": {
+    "sampleRate": 44100,
+    "threshold": 0,
+    "verbose": true,
+    "recordProgram": "arecord"
+  }
+}

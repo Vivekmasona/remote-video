@@ -1,74 +1,24 @@
 const express = require('express');
-const http = require('http');
-const socketIo = require('socket.io');
-const record = require('node-record-lpcm16');
-const fs = require('fs');
-
-const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
+app.use(bodyParser.json());
+app.use(cors());
 
-let audioStream;
-let isRecording = false;
+let iframeUrl = '';
 
-function startRecording() {
-  if (!isRecording) {
-    console.log('Starting recording...');
-    try {
-      audioStream = record.start({
-        sampleRate: config.audio.sampleRate,
-        threshold: config.audio.threshold,
-        verbose: config.audio.verbose,
-        recordProgram: config.audio.recordProgram
-      });
-
-      audioStream.on('data', (data) => {
-        io.emit('audio', data);
-      });
-
-      audioStream.on('error', (err) => {
-        console.error('Recording error:', err);
-      });
-
-      isRecording = true;
-      console.log('Recording started');
-    } catch (error) {
-      console.error('Error starting recording:', error);
-    }
-  }
-}
-
-function stopRecording() {
-  if (isRecording) {
-    console.log('Stopping recording...');
-    record.stop();
-    isRecording = false;
-    console.log('Recording stopped');
-  }
-}
-
-app.use(express.static('public'));
-
-app.post('/start', (req, res) => {
-  startRecording();
-  res.send('Recording started');
+app.post('/update-url', (req, res) => {
+    iframeUrl = req.body.url;
+    res.json({ status: 'URL updated' });
 });
 
-app.post('/stop', (req, res) => {
-  stopRecording();
-  res.send('Recording stopped');
+app.get('/current-url', (req, res) => {
+    res.json({ url: iframeUrl });
 });
 
-io.on('connection', (socket) => {
-  console.log('New client connected');
-  socket.on('disconnect', () => {
-    console.log('Client disconnected');
-  });
-});
-
-server.listen(config.server.port, () => {
-  console.log(`Listening on port ${config.server.port}`);
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
 

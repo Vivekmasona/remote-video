@@ -1,16 +1,15 @@
 {
-  "name": "audio-broadcast",
+  "name": "audio-player-app",
   "version": "1.0.0",
-  "description": "A simple live audio broadcasting server using Node.js and socket.io",
-  "main": "server.js",
+  "description": "A simple audio player application with real-time control",
+  "main": "server.js", // assuming your server file is named server.js
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js" // assuming your server file is named server.js
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
-    "socket.io": "^4.0.0",
-    "node-record-lpcm16": "^0.3.0"
-  },
-  "author": "Your Name",
-  "license": "MIT"
+    "socket.io": "^4.0.1"
+  }
 }

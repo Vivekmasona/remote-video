@@ -2,9 +2,9 @@
   "name": "audio-player-app",
   "version": "1.0.0",
   "description": "A simple audio player application with real-time control",
-  "main": "server.js", // assuming your server file is named server.js
+  "main": "server.js", 
   "scripts": {
-    "start": "node server.js" // assuming your server file is named server.js
+    "start": "node server.js" 
   },
   "dependencies": {
     "body-parser": "^1.19.0",

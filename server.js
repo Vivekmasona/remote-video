@@ -23,34 +23,29 @@ app.get('/current-url', (req, res) => {
     res.json({ url: iframeUrl });
 });
 
-const PORT = 3000;
-server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
-
 io.on('connection', (socket) => {
     console.log('A client connected');
 
-    // Handle control panel events
     socket.on('play', () => {
-        // Implement play logic
-        // For example: emit 'play' event to all clients to start playback
-        io.emit('play');
+        // Handle play event
+        console.log('Play event received');
+        // Your play logic here
     });
 
     socket.on('pause', () => {
-        // Implement pause logic
-        // For example: emit 'pause' event to all clients to pause playback
-        io.emit('pause');
+        // Handle pause event
+        console.log('Pause event received');
+        // Your pause logic here
     });
 
-    // Handle other control events (volume control, mute, forward, etc.)
-    // Example:
-    // socket.on('volumeChange', (volume) => {
-    //     io.emit('volumeChange', volume);
-    // });
+    socket.on('stop', () => {
+        // Handle stop event
+        console.log('Stop event received');
+        // Your stop logic here
+    });
+});
 
-    // socket.on('forward', () => {
-    //     io.emit('forward');
-    // });
+const PORT = 3000;
+server.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });

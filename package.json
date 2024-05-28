@@ -2,14 +2,14 @@
   "name": "remote-music-player",
   "version": "1.0.0",
   "description": "A remote music player control panel",
-  "main": "server.js", // Assuming your entry file is named server.js
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js" // Command to start your server
+    "start": "node index.js" 
   },
   "dependencies": {
-    "express": "^4.17.1", // Web framework for Node.js
-    "body-parser": "^1.19.0", // Middleware for parsing JSON bodies
-    "cors": "^2.8.5" // Middleware for enabling CORS (Cross-Origin Resource Sharing)
+    "express": "^4.17.1", 
+    "body-parser": "^1.19.0", 
+    "cors": "^2.8.5" 
   }
 }
 

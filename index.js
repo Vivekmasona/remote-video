@@ -6,27 +6,39 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-let iframeUrl = '';
+let audioStatus = 'stop'; // Initial status of the audio player
+let audioUrl = ''; // Initial URL of the audio
+
+app.post('/control', (req, res) => {
+    const { action } = req.body;
+    
+    // Update the audioStatus based on the action received
+    if (action === 'play') {
+        audioStatus = 'play';
+    } else if (action === 'pause') {
+        audioStatus = 'pause';
+    } else if (action === 'stop') {
+        audioStatus = 'stop';
+    }
+
+    res.json({ status: 'Button click received', action });
+});
+
+app.get('/audio-status', (req, res) => {
+    res.json({ status: audioStatus });
+});
 
 app.post('/update-url', (req, res) => {
-    iframeUrl = req.body.url;
+    const { url } = req.body;
+    audioUrl = url;
     res.json({ status: 'URL updated' });
 });
 
 app.get('/current-url', (req, res) => {
-    res.json({ url: iframeUrl });
+    res.json({ url: audioUrl });
 });
 
-app.post('/control', (req, res) => {
-    const { action } = req.body;
-    // Here, you can handle different actions like 'play', 'pause', 'stop'
-    // Depending on the action, you can update the state of the audio player
-    // For now, let's just log the action received
-    console.log('Button clicked:', action);
-    res.json({ status: 'Button click received', action });
-});
-
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

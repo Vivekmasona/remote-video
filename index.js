@@ -17,20 +17,13 @@ app.get('/current-url', (req, res) => {
     res.json({ url: iframeUrl });
 });
 
-// New endpoints for controlling the audio player
-app.post('/play', (req, res) => {
-    // Code to play audio
-    res.json({ status: 'Playing' });
-});
-
-app.post('/pause', (req, res) => {
-    // Code to pause audio
-    res.json({ status: 'Paused' });
-});
-
-app.post('/stop', (req, res) => {
-    // Code to stop audio
-    res.json({ status: 'Stopped' });
+app.post('/control', (req, res) => {
+    const { action } = req.body;
+    // Here, you can handle different actions like 'play', 'pause', 'stop'
+    // Depending on the action, you can update the state of the audio player
+    // For now, let's just log the action received
+    console.log('Button clicked:', action);
+    res.json({ status: 'Button click received', action });
 });
 
 const PORT = 3000;

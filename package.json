@@ -1,16 +1,15 @@
 {
-  "name": "backend",
+  "name": "remote-music-player",
   "version": "1.0.0",
-  "description": "Backend server for iframe URL update",
-  "main": "index.js",
+  "description": "A remote music player control panel",
+  "main": "server.js", // Assuming your entry file is named server.js
   "scripts": {
-    "start": "node index.js"
+    "start": "node server.js" // Command to start your server
   },
   "dependencies": {
-    "express": "^4.17.1",
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5"
-  },
-  "author": "",
-  "license": "ISC"
+    "express": "^4.17.1", // Web framework for Node.js
+    "body-parser": "^1.19.0", // Middleware for parsing JSON bodies
+    "cors": "^2.8.5" // Middleware for enabling CORS (Cross-Origin Resource Sharing)
+  }
 }
+
